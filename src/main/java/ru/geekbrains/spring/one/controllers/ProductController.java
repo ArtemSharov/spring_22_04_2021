@@ -29,7 +29,7 @@ public class ProductController {
     @GetMapping("/products/{id}")
     public String showProductInfo(@PathVariable(name = "id") Long id, Model model) {
         productService.findOneById(id).ifPresent(p -> model.addAttribute("product", p));
-        return "student_info";
+        return "product_info";
     }
 
     @GetMapping("/products/add")
@@ -47,5 +47,12 @@ public class ProductController {
     public String deleteProductById(@PathVariable Long id) {
         productService.deleteById(id);
         return "redirect:/";
+    }
+
+    @GetMapping("/category")
+    public String showFilteredProducts(@RequestParam String title, Model model){
+        List<Product> products = productService.showProductsFromCategory(title);
+        model.addAttribute("products", products);
+        return "index";
     }
 }

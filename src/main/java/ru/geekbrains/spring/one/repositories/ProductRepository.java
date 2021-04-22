@@ -3,6 +3,7 @@ package ru.geekbrains.spring.one.repositories;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.geekbrains.spring.one.model.Category;
 import ru.geekbrains.spring.one.model.Product;
 import ru.geekbrains.spring.one.utils.HibernateUtils;
 
@@ -49,6 +50,18 @@ public class ProductRepository {
             session.beginTransaction();
             session.createQuery("delete from Product p where p.id = " + id).executeUpdate();
             session.getTransaction().commit();
+        }
+    }
+
+    public List<Product> showProductsFromCategory(String title){
+        try (Session session = hibernateUtils.getCurrentSession()) {
+            session.beginTransaction();
+            Category category = session.createNamedQuery("withProducts", Category.class)
+                    .setParameter("title", title)
+                    .getSingleResult();
+            List<Product> products = category.getProducts();
+            session.getTransaction().commit();
+            return products;
         }
     }
 }

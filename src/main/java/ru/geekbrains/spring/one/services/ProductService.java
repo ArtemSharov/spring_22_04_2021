@@ -32,4 +32,6 @@ public class ProductService {
     public void deleteById(Long id) {
         productRepository.deleteById(id);
     }
+
+    public List<Product> showProductsFromCategory(String title) { return productRepository.showProductsFromCategory(title); }
 }
