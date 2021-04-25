@@ -17,6 +17,7 @@
             <tr>
                 <th>ID</th>
                 <th>Название</th>
+                <th>Категория</th>
                 <th>Цена</th>
                 <th>Действия</th>
             </tr>
@@ -25,6 +26,7 @@
             <tr th:each="p : ${products}">
                 <td th:text="${p.id}"/>
                 <td th:text="${p.title}"/>
+                <td th:text="${p.category.getTitle}"/>
                 <td th:text="${p.price}"/>
                 <td>
                     <a class="btn btn-danger" th:href="@{'/products/delete/' + ${p.id}}">Удалить запись</a>
