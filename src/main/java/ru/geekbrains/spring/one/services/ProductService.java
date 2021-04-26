@@ -1,7 +1,11 @@
 package ru.geekbrains.spring.one.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.spring.one.model.Product;
 import ru.geekbrains.spring.one.repositories.ProductRepository;
 
@@ -17,12 +21,12 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public Page<Product> findAll(int page, int size) {
+        return productRepository.findAll(PageRequest.of(page, size));
     }
 
     public Optional<Product> findOneById(Long id) {
-        return productRepository.findOneById(id);
+        return productRepository.findById(id);
     }
 
     public void save(Product product) {
@@ -33,5 +37,22 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public List<Product> showProductsFromCategory(String title) { return productRepository.showProductsFromCategory(title); }
+    @Transactional
+    public void incrementPriceById(Long id, int amount) {
+        Product p = productRepository.findById(id).get();
+        p.incrementPrice(amount);
+    }
+
+    public Page<Product> findAllByPriceBetween(int page, int size, Integer min, Integer max){
+
+        return productRepository.findAllByPriceBetween(min, max, PageRequest.of(page, size));
+
+    }
+    public Page<Product> findAllByTitleLike(int page, int size, String title){
+
+        return productRepository.findAllByTitleLike(title, PageRequest.of(page, size));
+
+    }
+
+
 }
